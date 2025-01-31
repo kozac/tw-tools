@@ -3,6 +3,25 @@
 <head>
   <meta charset="UTF-8" />
   <title>Gerador de Scripts fakes | Tribal Wars</title>
+
+  <!-- Metatags de SEO básicas -->
+  <meta name="description" content="Gerador de Scripts fakes para Tribal Wars: Crie e copie scripts personalizados com coordenadas e unidades. Simplifique seus fakes no TW!">
+  <meta name="keywords" content="Tribal Wars, scripts, fakes, spy, ram, coordenadas, gerador">
+  <meta name="author" content="Seu Nome ou Empresa">
+
+  <!-- Metatags Open Graph (para Facebook, WhatsApp, etc.) -->
+  <meta property="og:title" content="Gerador de Scripts fakes | Tribal Wars" />
+  <meta property="og:description" content="Crie e copie scripts personalizados para enviar fakes no Tribal Wars. Ajuste unidades e coordenadas facilmente!" />
+  <meta property="og:image" content="https://SEU_LINK_DE_IMAGEM_AQUI.jpg" />
+  <meta property="og:url" content="https://SEU_DOMINIO_OU_GITHUBPAGES_URL" />
+  <meta property="og:type" content="website" />
+  
+  <!-- Metatags do Twitter (Card) -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Gerador de Scripts fakes | Tribal Wars">
+  <meta name="twitter:description" content="Crie scripts para Tribal Wars de forma fácil e rápida: coord, spy, ram e mais.">
+  <meta name="twitter:image" content="https://SEU_LINK_DE_IMAGEM_AQUI.jpg">
+  
   <style>
     /* Estilo básico inspirado em Tribal Wars */
     body {
@@ -132,8 +151,7 @@
 
   <main>
     <h2 class="section-title">1. Cole as coordenadas ou textos que as contenham</h2>
-    <p>Copie e cole aqui qualquer texto que contenha coordenadas no formato <strong>(NNN|NNN)</strong> ou <strong>NNN|NNN</strong>. 
-      </p>
+    <p>Copie e cole aqui qualquer texto que contenha coordenadas no formato <strong>(NNN|NNN)</strong> ou <strong>NNN|NNN</strong>.</p>
     <textarea id="inputText" placeholder="Cole aqui as coordenadas..."></textarea>
 
     <h2 class="section-title">2. Configure as quantidades de unidades</h2>
@@ -190,11 +208,6 @@
       const ramValue = parseInt(document.getElementById("ramInput").value) || 0;
 
       // Monta a string do unitAmounts.
-      // Se spyValue > 0, incluímos "spy": ...
-      // Se ramValue > 0, incluímos "ram": ...
-      // Ex: "spy": 5, "ram": 1
-      let unitAmounts = "";
-      // Vamos guardar pares em array e depois juntar por vírgula para evitar vírgula a mais no final
       const unitsArray = [];
       if (spyValue > 0) {
         unitsArray.push(`"spy": ${spyValue}`);
@@ -202,13 +215,9 @@
       if (ramValue > 0) {
         unitsArray.push(`"ram": ${ramValue}`);
       }
-      // Caso não tenha nenhum valor > 0, deixamos como objeto vazio. Senão, vira "spy": X, ...
       const unitsString = unitsArray.length > 0 ? unitsArray.join(", ") : "";
 
       // 3. Construir o script final no formato solicitado
-      // Exemplo base (com sendMode random):
-      // javascript: var config = { "unitAmounts": { "spy": 5 }, "coords": "XXX|YYY XXX|YYY", "sendMode": "random" }; ...
-      // Nota: Abaixo está praticamente o mesmo script que você citou na descrição, adaptado.
       const finalScript = `javascript: var config = {
   "unitAmounts": { ${unitsString} },
   "coords": "${coords}",
