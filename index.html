@@ -2,46 +2,261 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Meu Site no GitHub Pages</title>
+  <title>Gerador de Scripts | Tribal Wars</title>
   <style>
+    /* Estilo básico inspirado em Tribal Wars */
     body {
-      font-family: Arial, sans-serif;
       margin: 0;
-      padding: 20px;
-      background-color: #f1f1f1;
+      padding: 0;
+      font-family: "Verdana", sans-serif;
+      background: #f4e4bc; /* cor de fundo que lembra o TW */
+      color: #3b2910;
     }
-    header {
-      background-color: #333;
-      color: #fff;
-      padding: 15px;
+
+    header, footer {
+      background-color: #aa915f;
+      padding: 10px;
       text-align: center;
     }
+
+    h1, h2, h3 {
+      margin: 0;
+      color: #fff;
+    }
+
+    header h1 {
+      font-size: 24px;
+    }
+
     main {
-      background-color: #fff;
+      max-width: 900px;
+      margin: 20px auto;
       padding: 20px;
-      margin-top: 20px;
+      background-color: #fff4d3; /* cor clara, parecido com pergaminho */
+      border: 1px solid #aa915f;
       border-radius: 5px;
     }
-    footer {
-      text-align: center;
-      margin-top: 20px;
-      color: #666;
+
+    .section-title {
+      margin-top: 0;
+      border-bottom: 2px solid #aa915f;
+      padding-bottom: 5px;
+      color: #3b2910;
+    }
+
+    label {
+      display: inline-block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    textarea {
+      width: 100%;
+      height: 150px;
+      box-sizing: border-box;
+      margin-bottom: 15px;
+      font-family: monospace;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 8px;
+      resize: vertical;
+    }
+
+    .inputs-container {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      width: 100px;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    button {
+      cursor: pointer;
+      background-color: #aa915f;
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      font-size: 14px;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #8d7a4f;
+    }
+
+    .output-label {
+      font-weight: bold;
+      margin: 10px 0 5px;
+    }
+
+    .output-textarea {
+      width: 100%;
+      height: 180px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      resize: vertical;
+      font-family: monospace;
+      padding: 8px;
+    }
+
+    footer p {
+      margin: 0;
+      font-size: 12px;
+      color: #eee;
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>Bem-vindo ao meu site!</h1>
+    <h1>Gerador de Scripts | Tribal Wars</h1>
   </header>
-  
+
   <main>
-    <p>Esse é um exemplo de página hospedada no GitHub Pages.</p>
-    <p>Faça modificações no seu arquivo <strong>index.html</strong> e veja as mudanças no seu site!</p>
+    <h2 class="section-title">1. Cole as coordenadas ou textos que as contenham</h2>
+    <p>Copie e cole aqui qualquer texto que contenha coordenadas no formato <strong>(NNN|NNN)</strong> ou <strong>NNN|NNN</strong>. 
+      Exemplo: <em>(514|497) K45</em>, <em>Montelocauste de Ódio (510|493)</em>, etc.</p>
+    <textarea id="inputText" placeholder="Cole aqui as coordenadas..."></textarea>
+
+    <h2 class="section-title">2. Configure as quantidades de unidades</h2>
+    <p>Defina quantos espiões (spy) e aríetes (ram) deseja enviar. (Se não quiser usar algum deles, deixe em branco ou zero.)</p>
+    <div class="inputs-container">
+      <div class="input-group">
+        <label for="spyInput">Espiões (spy):</label>
+        <input type="number" id="spyInput" placeholder="Ex: 5" />
+      </div>
+      <div class="input-group">
+        <label for="ramInput">Aríetes (ram):</label>
+        <input type="number" id="ramInput" placeholder="Ex: 1" />
+      </div>
+    </div>
+
+    <h2 class="section-title">3. Gerar e Copiar o Script</h2>
+    <div class="buttons">
+      <button id="generateBtn">Gerar Script</button>
+      <button id="copyBtn">Copiar Script</button>
+    </div>
+
+    <label class="output-label" for="outputScript">Script Gerado:</label>
+    <textarea id="outputScript" class="output-textarea" readonly placeholder="O script aparecerá aqui..."></textarea>
   </main>
 
   <footer>
-    <p>&copy; 2025 - Seu Nome</p>
+    <p>Exemplo de Gerador de Scripts para Tribal Wars - &copy; 2025</p>
   </footer>
+
+  <script>
+    // Função para extrair coordenadas usando Regex:
+    // Vamos capturar qualquer padrão NNN|NNN (3 dígitos|3 dígitos).
+    function extractCoords(text) {
+      const regex = /(\d{3}\|\d{3})/g;
+      const matches = text.match(regex);
+      if (!matches) {
+        return ""; // Se não encontrar nada, retorna vazio
+      }
+      return matches.join(" ");
+    }
+
+    // Ao clicar em "Gerar Script"
+    const generateBtn = document.getElementById("generateBtn");
+    const copyBtn = document.getElementById("copyBtn");
+    const inputText = document.getElementById("inputText");
+    const outputScript = document.getElementById("outputScript");
+
+    generateBtn.addEventListener("click", () => {
+      // 1. Extrair coordenadas
+      const coords = extractCoords(inputText.value);
+
+      // 2. Montar objeto unitAmounts conforme os valores inseridos
+      const spyValue = parseInt(document.getElementById("spyInput").value) || 0;
+      const ramValue = parseInt(document.getElementById("ramInput").value) || 0;
+
+      // Monta a string do unitAmounts.
+      // Se spyValue > 0, incluímos "spy": ...
+      // Se ramValue > 0, incluímos "ram": ...
+      // Ex: "spy": 5, "ram": 1
+      let unitAmounts = "";
+      // Vamos guardar pares em array e depois juntar por vírgula para evitar vírgula a mais no final
+      const unitsArray = [];
+      if (spyValue > 0) {
+        unitsArray.push(`"spy": ${spyValue}`);
+      }
+      if (ramValue > 0) {
+        unitsArray.push(`"ram": ${ramValue}`);
+      }
+      // Caso não tenha nenhum valor > 0, deixamos como objeto vazio. Senão, vira "spy": X, ...
+      const unitsString = unitsArray.length > 0 ? unitsArray.join(", ") : "";
+
+      // 3. Construir o script final no formato solicitado
+      // Exemplo base (com sendMode random):
+      // javascript: var config = { "unitAmounts": { "spy": 5 }, "coords": "XXX|YYY XXX|YYY", "sendMode": "random" }; ...
+      // Nota: Abaixo está praticamente o mesmo script que você citou na descrição, adaptado.
+      const finalScript = `javascript: var config = {
+  "unitAmounts": { ${unitsString} },
+  "coords": "${coords}",
+  "sendMode": "random"
+};
+function randomFakeScript(unitAmounts, coords) {
+  var coord = coords.split(' ');
+  var coordSplit = coord[Math.floor(Math.random() * coord.length)].split('|');
+  document.forms[0].x.value = coordSplit[0];
+  document.forms[0].y.value = coordSplit[1];
+  jQuery('input[class=unitsInput]').val(0);
+  var count;
+  for (var unit in unitAmounts) {
+    if (unitAmounts.hasOwnProperty(unit)) {
+      if (unitAmounts[unit] > 0 && typeof document.forms[0][unit] != 'undefined') {
+        count = parseInt(document.forms[0][unit].nextSibling.nextSibling.innerHTML.match(/\\d+/));
+        if (count > 0 && unitAmounts[unit] < count) {
+          document.forms[0][unit].value = Math.min(unitAmounts[unit], count);
+        }
+      }
+    }
+  }
+}
+if (game_data.screen === 'place' && game_data.mode === null) {
+  const { unitAmounts, coords } = config;
+  randomFakeScript(unitAmounts, coords);
+} else {
+  UI.InfoMessage('Redirecionando...');
+  setTimeout(function () {
+    window.location.assign(game_data.link_base_pure + 'place');
+  }, 500);
+}`;
+
+      // 4. Mostrar o script no textarea
+      outputScript.value = finalScript;
+    });
+
+    // Ao clicar em "Copiar Script"
+    copyBtn.addEventListener("click", () => {
+      if (!outputScript.value.trim()) {
+        alert("Não há script gerado para copiar!");
+        return;
+      }
+      // Copia o conteúdo do textarea
+      outputScript.select();
+      document.execCommand("copy");
+      alert("Script copiado para a área de transferência!");
+    });
+  </script>
 </body>
 </html>
